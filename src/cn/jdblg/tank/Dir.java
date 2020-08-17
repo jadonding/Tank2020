@@ -5,5 +5,5 @@ package cn.jdblg.tank;
  * @create 2020-08-16-21:01
  */
 public enum Dir {
-    L, U, R, D, STOP
+    L, U, R, D
 }
