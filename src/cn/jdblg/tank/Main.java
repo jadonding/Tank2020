@@ -6,13 +6,11 @@ import java.util.concurrent.TimeUnit;
  * @create 2020-08-16-20:59
  */
 
-
 public class Main {
-    public static void main(String[] args) {
-        TankFrame tf = new TankFrame();
-
+      public static void main(String[] args) {
+        TankFrame tf = TankFrame.INSTANCE;
+        new Thread(()->new Audio("audio/war1.wav").loop()).start();
         tf.setVisible(true);
-
         for(;;) {
             try {
                 Thread.sleep(25);
@@ -20,7 +18,7 @@ public class Main {
                 e.printStackTrace();
             }
 
-            tf.repaint();
+            TankFrame.INSTANCE.repaint();
         }
     }
 }

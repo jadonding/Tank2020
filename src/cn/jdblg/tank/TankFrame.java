@@ -1,6 +1,10 @@
 package cn.jdblg.tank;
+
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ForkJoinPool;
 
 /**
  * @author Jadon
@@ -9,17 +13,18 @@ import java.awt.event.*;
 
 
 public class TankFrame extends Frame {
-    private Tank myTank;
-    private Tank enemy;
-    private Bullet bullet;
+    public static final TankFrame INSTANCE = new TankFrame();
+    private Player myTank;
+    private List<Bullet> bullets;
+    private List<Tank> tanks;
+    private List<Explode> explodes;
     public static final int GAME_WIDTH = 800;
     public static final int GAME_HEIGHT = 600;
 
-    public TankFrame () {
+    private TankFrame() {
         this.setTitle("坦克大战————by:Jadon");
         this.setLocation(400, 100);
         this.setSize(GAME_WIDTH, GAME_HEIGHT);
-
         this.addKeyListener(new TankKeyListener());
         addWindowListener(new WindowAdapter() {
 
@@ -29,19 +34,58 @@ public class TankFrame extends Frame {
             }
 
         });
-        myTank = new Tank(100, 100, Dir.R, Group.GOOD,this);
-        enemy = new Tank(200, 200, Dir.D, Group.BAD,this);
-        bullet = new Bullet(100,100,Dir.D,Group.BAD);
+        initGameObj();
+
     }
+
+    private void initGameObj() {
+        myTank = new Player(100, 100, Dir.R, Group.GOOD);
+        tanks = new ArrayList<>();
+        bullets = new ArrayList<>();
+        explodes = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            tanks.add(new Tank(100 + 50 * i, 200, Dir.D, Group.BAD));
+        }
+    }
+
 
     @Override
     public void paint(Graphics g) {
+        Color c = g.getColor();
+        g.setColor(Color.WHITE);
+        g.drawString("bullets:" + bullets.size(), 10, 50);
+        g.drawString("enemies:" + tanks.size(), 10, 65);
+        g.drawString("explodes:" + explodes.size(), 10, 80);
+        g.setColor(c);
         myTank.paint(g);
-        enemy.paint(g);
-        bullet.paint(g);
+        for (int i = 0; i < tanks.size(); i++) {
+            if (!tanks.get(i).isLive()) {
+                tanks.remove(i);
+            } else {
+                tanks.get(i).paint(g);
+            }
+        }
+        for (int i = 0; i < bullets.size(); i++) {
+            for (int j = 0; j < tanks.size(); j++) {
+                bullets.get(i).collidesWithTank(tanks.get(j));
+            }
+            if (!bullets.get(i).isLive()) {
+                bullets.remove(i);
+            } else {
+                bullets.get(i).paint(g);
+            }
+        }
+        for (int i = 0; i < explodes.size(); i++) {
+            if (!explodes.get(i).isLive()) {
+                explodes.remove(i);
+            } else {
+                explodes.get(i).paint(g);
+            }
+        }
     }
 
     Image offScreenImage = null;
+
     @Override
     public void update(Graphics g) {
         if (offScreenImage == null) {
@@ -57,17 +101,21 @@ public class TankFrame extends Frame {
     }
 
     public void add(Bullet bullet) {
-        this.bullet = bullet;
+        this.bullets.add(bullet);
+
+    }
+
+    public void add(Explode explode) {
+        this.explodes.add(explode);
     }
 
     private class TankKeyListener extends KeyAdapter {
 
         @Override
         public void keyPressed(KeyEvent e) {
-
             myTank.keyPressed(e);
-
         }
+
 
         @Override
         public void keyReleased(KeyEvent e) {
