@@ -4,7 +4,6 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ForkJoinPool;
 
 /**
  * @author Jadon
@@ -14,12 +13,13 @@ import java.util.concurrent.ForkJoinPool;
 
 public class TankFrame extends Frame {
     public static final TankFrame INSTANCE = new TankFrame();
+    public static final int GAME_WIDTH = 1280;
+    public static final int GAME_HEIGHT = 720;
     private Player myTank;
     private List<Bullet> bullets;
     private List<Tank> tanks;
     private List<Explode> explodes;
-    public static final int GAME_WIDTH = 800;
-    public static final int GAME_HEIGHT = 600;
+
 
     private TankFrame() {
         this.setTitle("坦克大战————by:Jadon");
@@ -43,7 +43,8 @@ public class TankFrame extends Frame {
         tanks = new ArrayList<>();
         bullets = new ArrayList<>();
         explodes = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
+        int initTankCount = Integer.parseInt(PropertyMgr.get("initTankCount"));
+        for (int i = 0; i < initTankCount; i++) {
             tanks.add(new Tank(100 + 50 * i, 200, Dir.D, Group.BAD));
         }
     }

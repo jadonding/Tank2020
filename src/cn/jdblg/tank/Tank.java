@@ -113,6 +113,7 @@ public class Tank {
                 if (!(y > GAME_HEIGHT - ResourceMgr.badTankU.getHeight())) y += SPEED;
                 break;
         }
+//        boundsCheck();
         randomDir();
         if (r.nextInt(100) > 90) fire();
     }
@@ -129,7 +130,6 @@ public class Tank {
         int bX = x + ResourceMgr.goodTankU.getWidth() / 2 - ResourceMgr.bulletU.getWidth() / 2;
         int bY = y + ResourceMgr.goodTankU.getHeight() / 2 - ResourceMgr.bulletU.getHeight() / 2;
         TankFrame.INSTANCE.add(new Bullet(bX, bY, dir, group));
-
 
     }
 

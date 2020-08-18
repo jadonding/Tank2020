@@ -1,17 +1,17 @@
 package cn.jdblg.tank;
-import java.awt.*;
-import java.util.concurrent.TimeUnit;
+
+
 /**
  * @author Jadon
  * @create 2020-08-16-20:59
  */
 
 public class Main {
-      public static void main(String[] args) {
+    public static void main(String[] args) {
         TankFrame tf = TankFrame.INSTANCE;
-        new Thread(()->new Audio("audio/war1.wav").loop()).start();
+        new Thread(() -> new Audio("audio/war1.wav").loop()).start();
         tf.setVisible(true);
-        for(;;) {
+        for (; ; ) {
             try {
                 Thread.sleep(25);
             } catch (InterruptedException e) {
