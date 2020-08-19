@@ -9,7 +9,7 @@ import static cn.jdblg.tank.TankFrame.GAME_WIDTH;
  * @author Jadon
  * @create 2020-08-17-10:53
  */
-public class Bullet {
+public class Bullet extends GameObject {
     private int x, y;
     private Dir dir;
 

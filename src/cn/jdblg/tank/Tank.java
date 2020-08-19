@@ -6,11 +6,12 @@ package cn.jdblg.tank;
  */
 
 import java.awt.*;
+import java.util.List;
 import java.util.Random;
 import static cn.jdblg.tank.TankFrame.GAME_HEIGHT;
 import static cn.jdblg.tank.TankFrame.GAME_WIDTH;
 
-public class Tank {
+public class Tank extends GameObject{
     private int x, y;
     private Dir dir;
     private static boolean moving = true;
@@ -30,16 +31,8 @@ public class Tank {
         return x;
     }
 
-    public void setX(int x) {
-        this.x = x;
-    }
-
     public int getY() {
         return y;
-    }
-
-    public void setY(int y) {
-        this.y = y;
     }
 
     public Dir getDir() {

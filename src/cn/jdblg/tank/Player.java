@@ -5,14 +5,20 @@ package cn.jdblg.tank;
  * @create 2020-08-16-21:00
  */
 
+import cn.jdblg.tank.strategy.DefaultFireStrategy;
+import cn.jdblg.tank.strategy.FireStrategy;
+import cn.jdblg.tank.strategy.FourDirFireSrategy;
+import cn.jdblg.tank.strategy.LRFireSrategy;
+
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
 import static cn.jdblg.tank.TankFrame.GAME_HEIGHT;
 import static cn.jdblg.tank.TankFrame.GAME_WIDTH;
 
-public class Player {
-    private int x, y;
+public class Player extends GameObject{
+    private int x;
+    private int y;
     private Dir dir;
     private boolean bL, bU, bR, bD;
     private static boolean moving = false;
@@ -103,13 +109,6 @@ public class Player {
         this.group = group;
     }
 
-    public static boolean isMoving() {
-        return moving;
-    }
-
-    public static void setMoving(boolean moving) {
-        Player.moving = moving;
-    }
 
     public void paint(Graphics g) {
         if (!this.isLive()) return;
@@ -132,6 +131,42 @@ public class Player {
 
 
 
+
+    private void setMainDir() {
+        if (!bL && !bU && !bR && !bD)
+            moving = false;
+        else {
+            moving = true;
+            if (bL && !bU && !bR && !bD)
+                dir = Dir.L;
+            if (!bL && bU && !bR && !bD)
+                dir = Dir.U;
+            if (!bL && !bU && bR && !bD)
+                dir = Dir.R;
+            if (!bL && !bU && !bR && bD)
+                dir = Dir.D;
+        }
+    }
+
+    private void move() {
+        if (!moving) return;
+        switch (dir) {
+            case L:
+                if (!(x < 0)) x -= SPEED;
+                break;
+            case U:
+                if (!(y < 30)) y -= SPEED;
+                break;
+            case R:
+                if (!(x > GAME_WIDTH - ResourceMgr.badTankU.getWidth())) x += SPEED;
+                break;
+            case D:
+                if (!(y > GAME_HEIGHT - ResourceMgr.badTankU.getHeight())) y += SPEED;
+                break;
+
+        }
+//        new Thread(()->new Audio("audio/tank_move.wav").play()).start();
+    }
     public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();
 
@@ -156,42 +191,6 @@ public class Player {
         setMainDir();
 
     }
-
-    private void setMainDir() {
-        if (!bL && !bU && !bR && !bD)
-            moving = false;
-        else {
-            moving = true;
-            if (bL && !bU && !bR && !bD)
-                dir = Dir.L;
-            if (!bL && bU && !bR && !bD)
-                dir = Dir.U;
-            if (!bL && !bU && bR && !bD)
-                dir = Dir.R;
-            if (!bL && !bU && !bR && bD)
-                dir = Dir.D;
-        }
-    }
-
-    private void move() {
-        if (!moving) return;
-        switch (dir) {
-            case L:
-                if(!(x < 0)) x -= SPEED;
-                break;
-            case U:
-                if(!(y < 30)) y -= SPEED;
-                break;
-            case R:
-                if(!(x > GAME_WIDTH - ResourceMgr.badTankU.getWidth())) x += SPEED;
-                break;
-            case D:
-                if(!(y > GAME_HEIGHT - ResourceMgr.badTankU.getHeight())) y += SPEED;
-                break;
-        }
-//        new Thread(()->new Audio("audio/tank_move.wav").play()).start();
-    }
-
     public void keyReleased(KeyEvent e) {
         int key = e.getKeyCode();
         switch (key) {
@@ -216,10 +215,23 @@ public class Player {
     }
 
     private void fire() {
-        int bX = x + ResourceMgr.goodTankU.getWidth() / 2 - ResourceMgr.bulletU.getWidth() / 2;
-        int bY = y + ResourceMgr.goodTankU.getHeight() / 2 - ResourceMgr.bulletU.getHeight() / 2;
-        TankFrame.INSTANCE.add(new Bullet(bX, bY, dir, group));
-        new Thread(()->new Audio("audio/tank_fire.wav").play()).start();
+        //        FireStrategy strategy = new FourDirFireSrategy();
+        FireStrategy strategy = null;
+//        ClassLoader classLoader = Player.class.getClassLoader();
+//        try {
+//            Class clazz = classLoader.loadClass("cn.jdblg.tank.strategy." + PropertyMgr.get("tankFireStrategy"));
+//            strategy = (FireStrategy)(clazz.getDeclaredConstructor().newInstance());
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+        try {
+            Class clazz = Class.forName("cn.jdblg.tank.strategy." + PropertyMgr.get("tankFireStrategy"));
+            strategy = (FireStrategy)(clazz.getDeclaredConstructor().newInstance());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        strategy.fire(this);
+
     }
 
     public void die() {

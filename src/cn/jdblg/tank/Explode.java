@@ -6,7 +6,7 @@ package cn.jdblg.tank;
  */
 
 import java.awt.*;
-public class Explode {
+public class Explode extends GameObject {
     private int x, y;
     private int width, height;
     private boolean live = true;
