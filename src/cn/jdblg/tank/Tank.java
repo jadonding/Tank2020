@@ -106,7 +106,7 @@ public class Tank extends GameObject{
         if (!moving) return;
         switch (dir) {
             case L:
-                if (!(x < 0)) x -= SPEED;
+                if (!(x < 0) ) x -= SPEED;
                 break;
             case U:
                 if (!(y < 30)) y -= SPEED;
@@ -134,13 +134,13 @@ public class Tank extends GameObject{
     private void fire() {
         int bX = x + ResourceMgr.goodTankU.getWidth() / 2 - ResourceMgr.bulletU.getWidth() / 2;
         int bY = y + ResourceMgr.goodTankU.getHeight() / 2 - ResourceMgr.bulletU.getHeight() / 2;
-        TankFrame.INSTANCE.add(new Bullet(bX, bY, dir, group));
+        TankFrame.INSTANCE.gm.getGameObjects().add(new Bullet(bX, bY, dir, group));
 
     }
 
     public void die() {
         this.setLive(false);
-        TankFrame.INSTANCE.add(new Explode(x, y));
+        TankFrame.INSTANCE.gm.getGameObjects().add(new Explode(x, y));
     }
 
     public Rectangle getRect() {

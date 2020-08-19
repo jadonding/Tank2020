@@ -14,7 +14,7 @@ public class FourDirFireSrategy implements FireStrategy{
         int bX = player.getX() + ResourceMgr.goodTankU.getWidth() / 2 - ResourceMgr.bulletU.getWidth() / 2;
         Dir[] dirs = Dir.values();
         for(Dir d : dirs){
-            TankFrame.INSTANCE.add(new Bullet(bX, bY, d, player.getGroup()));
+            TankFrame.INSTANCE.gm.getGameObjects().add(new Bullet(bX, bY, d, player.getGroup()));
         }
         new Thread(() -> new Audio("audio/tank_fire.wav").play()).start();
     }

@@ -17,9 +17,7 @@ public class TankFrame extends Frame {
     public static final TankFrame INSTANCE = new TankFrame();
     public static final int GAME_WIDTH = 1280;
     public static final int GAME_HEIGHT = 720;
-    private Player myTank;
-    List<GameObject> gameObjects;
-    ColliderChain chain = new ColliderChain();
+    public GameModel gm = new GameModel();
 
     private TankFrame() {
         this.setTitle("坦克大战————by:Jadon");
@@ -35,58 +33,12 @@ public class TankFrame extends Frame {
 
         });
 
-        initGameObj();
     }
 
-    private void initGameObj() {
-        myTank = new Player(100, 100, Dir.R, Group.GOOD);
-        gameObjects = new ArrayList<>();
-        int initTankCount = Integer.parseInt(PropertyMgr.get("initTankCount"));
-        for (int i = 0; i < initTankCount; i++) {
-            gameObjects.add(new Tank(100 + 50 * i, 200, Dir.D, Group.BAD));
-        }
-        gameObjects.add(new Wall(500,100,30,200));
-    }
-
-    public void add(GameObject gameObject) {
-        gameObjects.add(gameObject);
-    }
 
     @Override
     public void paint(Graphics g) {
-        Color c = g.getColor();
-        g.setColor(Color.WHITE);
-        g.drawString("gameObjects:" + gameObjects.size(), 10, 50);
-//        g.drawString("bullets:" + bullets.size(), 10, 50);
-//        g.drawString("enemies:" + tanks.size(), 10, 65);
-//        g.drawString("explodes:" + explodes.size(), 10, 80);
-        g.setColor(c);
-//        for (int i = 0; i < gameObjects.size(); i++){
-//            if(gameObjects.get(i) instanceof Wall){
-//                Wall wall = (Wall)gameObjects.get(i);
-//                if(myTank.getX() > wall.getX() + wall.getW() || myTank.getX() < wall.getX() ||
-//                        myTank.getY() > wall.getY() + wall.getH() || myTank.getY() < wall.getY())
-//                myTank.paint(g);
-//            }
-//
-//        }
-        myTank.paint(g);
-
-        for (int i = 0; i < gameObjects.size(); i++) {
-            if(!gameObjects.get(i).isLive()){
-                gameObjects.remove(i);
-                continue;
-            }
-            GameObject g1 = gameObjects.get(i);
-            for(int j = 0; j < gameObjects.size(); j++){
-                GameObject g2 = gameObjects.get(j);
-                chain.collide(g1,g2);
-            }
-            if(gameObjects.get(i).isLive()) {
-                gameObjects.get(i).paint(g);
-            }
-
-        }
+        gm.paint(g);
     }
 
     Image offScreenImage = null;
@@ -108,11 +60,11 @@ public class TankFrame extends Frame {
     private class TankKeyListener extends KeyAdapter {
         @Override
         public void keyPressed(KeyEvent e) {
-            myTank.keyPressed(e);
+            gm.getMyTank().keyPressed(e);
         }
         @Override
         public void keyReleased(KeyEvent e) {
-            myTank.keyReleased(e);
+            gm.getMyTank().keyReleased(e);
         }
     }
 }
