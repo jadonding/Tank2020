@@ -1,3 +1,4 @@
 initTankCount=20
 #tank fire strategy
 tankFireStrategy=FourDirFireSrategy
+colliders=BulletTankCollider,BulletWallCollider,TankWallCollider

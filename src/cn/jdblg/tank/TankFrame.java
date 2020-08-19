@@ -1,5 +1,7 @@
 package cn.jdblg.tank;
 
+import cn.jdblg.tank.chainofresponsibility.ColliderChain;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
@@ -16,10 +18,8 @@ public class TankFrame extends Frame {
     public static final int GAME_WIDTH = 1280;
     public static final int GAME_HEIGHT = 720;
     private Player myTank;
-    //    private List<Bullet> bullets;
-//    private List<Tank> tanks;
-//    private List<Explode> explodes;
     List<GameObject> gameObjects;
+    ColliderChain chain = new ColliderChain();
 
     private TankFrame() {
         this.setTitle("坦克大战————by:Jadon");
@@ -34,72 +34,59 @@ public class TankFrame extends Frame {
             }
 
         });
-        initGameObj();
 
+        initGameObj();
     }
 
     private void initGameObj() {
         myTank = new Player(100, 100, Dir.R, Group.GOOD);
-//        tanks = new ArrayList<>();
-//        bullets = new ArrayList<>();
-//        explodes = new ArrayList<>();
         gameObjects = new ArrayList<>();
         int initTankCount = Integer.parseInt(PropertyMgr.get("initTankCount"));
         for (int i = 0; i < initTankCount; i++) {
             gameObjects.add(new Tank(100 + 50 * i, 200, Dir.D, Group.BAD));
         }
+        gameObjects.add(new Wall(500,100,30,200));
     }
-
 
     public void add(GameObject gameObject) {
         gameObjects.add(gameObject);
     }
-//    private void addTanks() {
-//        int initTankCount = Integer.parseInt(PropertyMgr.get("initTankCount"));
-//
-//        for (int i = 0; i < initTankCount; i++) {
-//            tanks.add(new Tank(100 + 50 * i, 200, Dir.D, Group.BAD));
-//        }
-//    }
-
 
     @Override
     public void paint(Graphics g) {
         Color c = g.getColor();
         g.setColor(Color.WHITE);
+        g.drawString("gameObjects:" + gameObjects.size(), 10, 50);
 //        g.drawString("bullets:" + bullets.size(), 10, 50);
 //        g.drawString("enemies:" + tanks.size(), 10, 65);
 //        g.drawString("explodes:" + explodes.size(), 10, 80);
         g.setColor(c);
+//        for (int i = 0; i < gameObjects.size(); i++){
+//            if(gameObjects.get(i) instanceof Wall){
+//                Wall wall = (Wall)gameObjects.get(i);
+//                if(myTank.getX() > wall.getX() + wall.getW() || myTank.getX() < wall.getX() ||
+//                        myTank.getY() > wall.getY() + wall.getH() || myTank.getY() < wall.getY())
+//                myTank.paint(g);
+//            }
+//
+//        }
         myTank.paint(g);
+
         for (int i = 0; i < gameObjects.size(); i++) {
-            gameObjects.get(i).paint(g);
+            if(!gameObjects.get(i).isLive()){
+                gameObjects.remove(i);
+                continue;
+            }
+            GameObject g1 = gameObjects.get(i);
+            for(int j = 0; j < gameObjects.size(); j++){
+                GameObject g2 = gameObjects.get(j);
+                chain.collide(g1,g2);
+            }
+            if(gameObjects.get(i).isLive()) {
+                gameObjects.get(i).paint(g);
+            }
+
         }
-//        for (int i = 0; i < tanks.size(); i++) {
-//            if (!tanks.get(i).isLive()) {
-//                tanks.remove(i);
-//            } else {
-//                tanks.get(i).paint(g);
-//            }
-//        }
-//        if (tanks.size() == 0) addTanks();
-//        for (int i = 0; i < bullets.size(); i++) {
-//            for (int j = 0; j < tanks.size(); j++) {
-//                bullets.get(i).collidesWithTank(tanks.get(j));
-//            }
-//            if (!bullets.get(i).isLive()) {
-//                bullets.remove(i);
-//            } else {
-//                bullets.get(i).paint(g);
-//            }
-//        }
-//        for (int i = 0; i < explodes.size(); i++) {
-//            if (!explodes.get(i).isLive()) {
-//                explodes.remove(i);
-//            } else {
-//                explodes.get(i).paint(g);
-//            }
-//        }
     }
 
     Image offScreenImage = null;
@@ -118,22 +105,11 @@ public class TankFrame extends Frame {
         g.drawImage(offScreenImage, 0, 0, null);
     }
 
-//    public void add(Bullet bullet) {
-//        this.bullets.add(bullet);
-//    }
-
-//    public void add(Explode explode) {
-//        this.explodes.add(explode);
-//    }
-
     private class TankKeyListener extends KeyAdapter {
-
         @Override
         public void keyPressed(KeyEvent e) {
             myTank.keyPressed(e);
         }
-
-
         @Override
         public void keyReleased(KeyEvent e) {
             myTank.keyReleased(e);

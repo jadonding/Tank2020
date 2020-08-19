@@ -12,10 +12,11 @@ import static cn.jdblg.tank.TankFrame.GAME_WIDTH;
 public class Bullet extends GameObject {
     private int x, y;
     private Dir dir;
-
+    private Rectangle rect;
     public static final int SPEED = 6;
     private Group group;
-
+    private int w = ResourceMgr.bulletU.getWidth();
+    private int h = ResourceMgr.bulletU.getHeight();
     public int getX() {
         return x;
     }
@@ -70,6 +71,7 @@ public class Bullet extends GameObject {
         this.y = y;
         this.dir = dir;
         this.group = group;
+        rect = new Rectangle(x,y,w,h);
     }
 
     public void paint(Graphics g) {
@@ -87,9 +89,9 @@ public class Bullet extends GameObject {
                 g.drawImage(ResourceMgr.bulletD, x, y, null);
                 break;
         }
-
-
         move();
+        this.rect.x = x;
+        this.rect.y = y;
     }
 
     private void move() {
@@ -132,4 +134,7 @@ public class Bullet extends GameObject {
         this.setLive(false);
     }
 
+    public Rectangle getRect() {
+        return rect;
+    }
 }

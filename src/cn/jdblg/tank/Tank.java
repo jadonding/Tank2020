@@ -12,13 +12,16 @@ import static cn.jdblg.tank.TankFrame.GAME_HEIGHT;
 import static cn.jdblg.tank.TankFrame.GAME_WIDTH;
 
 public class Tank extends GameObject{
-    private int x, y;
+    private int x, y ;
     private Dir dir;
     private static boolean moving = true;
     public static final int SPEED = 5;
     private Group group;
     private boolean live = true;
-
+    private Rectangle rect;
+    private int w = ResourceMgr.badTankU.getWidth();
+    private int h = ResourceMgr.badTankU.getHeight();
+    private int oldX,oldY;
     public boolean isLive() {
         return live;
     }
@@ -60,6 +63,8 @@ public class Tank extends GameObject{
         this.y = y;
         this.dir = dir;
         this.group = group;
+
+        rect = new Rectangle(x,y,w,h);
     }
 
     public static boolean isMoving() {
@@ -87,10 +92,17 @@ public class Tank extends GameObject{
                 break;
         }
         move();
+        this.rect.x = x;
+        this.rect.y = y;
+    }
+    public void back(){
+        x = oldX;
+        y = oldY;
     }
 
-
     private void move() {
+        oldX = x;
+        oldY = y;
         if (!moving) return;
         switch (dir) {
             case L:
@@ -129,5 +141,9 @@ public class Tank extends GameObject{
     public void die() {
         this.setLive(false);
         TankFrame.INSTANCE.add(new Explode(x, y));
+    }
+
+    public Rectangle getRect() {
+        return rect;
     }
 }

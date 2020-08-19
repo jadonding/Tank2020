@@ -19,13 +19,16 @@ import static cn.jdblg.tank.TankFrame.GAME_WIDTH;
 public class Player extends GameObject{
     private int x;
     private int y;
+    private int oldX,oldY;
     private Dir dir;
     private boolean bL, bU, bR, bD;
     private static boolean moving = false;
     public static final int SPEED = 7;
     private Group group;
     private boolean live = true;
-
+    private int w = ResourceMgr.goodTankU.getWidth();
+    private int h = ResourceMgr.goodTankU.getHeight();
+    private Rectangle rect;
     public boolean isLive() {
         return live;
     }
@@ -107,6 +110,7 @@ public class Player extends GameObject{
         this.y = y;
         this.dir = dir;
         this.group = group;
+        rect = new Rectangle(x,y,w,h);
     }
 
 
@@ -126,10 +130,18 @@ public class Player extends GameObject{
                 g.drawImage(ResourceMgr.goodTankD, x, y, null);
                 break;
         }
+
         move();
+        this.rect.x = x;
+        this.rect.y = y;
     }
-
-
+    public Rectangle getRect(){
+        return rect;
+    }
+    public void back(){
+        x = oldX;
+        y = oldY;
+    }
 
 
     private void setMainDir() {
@@ -149,6 +161,8 @@ public class Player extends GameObject{
     }
 
     private void move() {
+        oldX = x;
+        oldY = y;
         if (!moving) return;
         switch (dir) {
             case L:
