@@ -1,11 +1,7 @@
 package cn.jdblg.tank;
 
-import cn.jdblg.tank.chainofresponsibility.ColliderChain;
-
 import java.awt.*;
 import java.awt.event.*;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author Jadon
