@@ -298,5 +298,8 @@ public class Player extends GameObject{
 
     public void die() {
         this.setLive(false);
+        TankFrame.INSTANCE.gm.getGameObjects().add(new Explode(x, y));
+
+//        System.exit(0);
     }
 }

@@ -7,6 +7,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import static cn.jdblg.tank.TankFrame.GAME_HEIGHT;
+import static cn.jdblg.tank.TankFrame.GAME_WIDTH;
+
 /**
  * @author Jadon
  * @create 2020-08-20-1:42
@@ -29,13 +32,19 @@ public class GameModel implements Serializable {
     }
 
     private void initGameObjs() {
-        myTank = new Player(100, 100, Dir.R, Group.GOOD);
+        myTank = new Player(GAME_WIDTH/2, GAME_HEIGHT-80, Dir.R, Group.GOOD);
         gameObjects = new ArrayList<>();
         int initTankCount = Integer.parseInt(PropertyMgr.get("initTankCount"));
-        for (int i = 0; i < initTankCount; i++) {
-            gameObjects.add(new Tank(50 + 70 * i, 400, Dir.D, Group.BAD));
+        int initRowWallCount = GAME_WIDTH/160;
+        int initColumnWallCount = GAME_HEIGHT/250;
+        for (int i = 0; i < initColumnWallCount; i++) {
+            for(int j = 0;j < initRowWallCount;j++){
+                gameObjects.add(new Wall(80 + 160*j,130 + 250*i,80,150));
+            }
         }
-        gameObjects.add(new Wall(500,100,80,200));
+        for (int i = 0; i < initTankCount; i++) {
+            gameObjects.add(new Tank(10 + 70 * i, 30, Dir.D, Group.BAD));
+        }
         gameObjects.add(myTank);
     }
     public void add(GameObject gameObject) {

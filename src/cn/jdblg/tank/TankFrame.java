@@ -37,7 +37,12 @@ public class TankFrame extends Frame {
 
     @Override
     public void paint(Graphics g) {
-        gm.paint(g);
+        if(!gm.getMyTank().isLive()){
+            g.drawImage(ResourceMgr.gameOver,
+                    GAME_WIDTH/2 - ResourceMgr.gameOver.getWidth()/2,
+                    GAME_HEIGHT/2 - ResourceMgr.gameOver.getHeight()/2,null);
+        }
+        else gm.paint(g);
     }
 
     Image offScreenImage = null;
@@ -63,7 +68,11 @@ public class TankFrame extends Frame {
             int key = e.getKeyCode();
             if (key == KeyEvent.VK_S) save();
             else if (key == KeyEvent.VK_L) load();
-            else gm.getMyTank().keyPressed(e);
+            else {
+                if(gm.getMyTank().isLive()) {
+                    gm.getMyTank().keyPressed(e);
+                }
+            }
         }
 
         @Override

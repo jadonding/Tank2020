@@ -2,12 +2,14 @@ package cn.jdblg.tank;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 
 public class ResourceMgr {
 	public static BufferedImage goodTankL, goodTankU, goodTankR, goodTankD; 
 	public static BufferedImage badTankL, badTankU, badTankR, badTankD; 
-	public static BufferedImage bulletL, bulletU, bulletR, bulletD; 
+	public static BufferedImage bulletL, bulletU, bulletR, bulletD;
+	public static BufferedImage gameOver;
 	public static BufferedImage[] explodes = new BufferedImage[16];
 	
  	
@@ -27,7 +29,10 @@ public class ResourceMgr {
 			bulletL = ImageUtil.rotateImage(bulletU, -90);
 			bulletR = ImageUtil.rotateImage(bulletU, 90);
 			bulletD = ImageUtil.rotateImage(bulletU, 180);
-			
+
+//			gameOver = ImageIO.read(new File("E:\\Project\\Java\\MyJavaProject\\Tank\\src\\images\\bulletD.gif"));
+			gameOver = ImageIO.read(ResourceMgr.class.getClassLoader().getResourceAsStream("images/gameover.jpg"));
+
 			for(int i=0; i<16; i++) 
 				explodes[i] = ImageIO.read(ResourceMgr.class.getClassLoader().getResourceAsStream("images/e" + (i+1) + ".gif"));
 		} catch (IOException e) {
