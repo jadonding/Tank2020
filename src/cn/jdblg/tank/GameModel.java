@@ -3,6 +3,7 @@ package cn.jdblg.tank;
 import cn.jdblg.tank.chainofresponsibility.ColliderChain;
 
 import java.awt.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +11,7 @@ import java.util.List;
  * @author Jadon
  * @create 2020-08-20-1:42
  */
-public class GameModel {
+public class GameModel implements Serializable {
     public Player getMyTank() {
         return myTank;
     }
@@ -37,9 +38,9 @@ public class GameModel {
         gameObjects.add(new Wall(500,100,80,200));
         gameObjects.add(myTank);
     }
-//    public void add(GameObject gameObject) {
-//        gameObjects.add(gameObject);
-//    }
+    public void add(GameObject gameObject) {
+        gameObjects.add(gameObject);
+    }
     public void paint(Graphics g){
         Color c = g.getColor();
         g.setColor(Color.WHITE);

@@ -2,13 +2,15 @@ package cn.jdblg.tank;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
+import java.io.Serializable;
+
 /**
  * @author Jadon
  * @create 2020-08-17-10:32
  */
 
 
-public class ImageUtil {
+public class ImageUtil implements Serializable {
     public static BufferedImage rotateImage(final BufferedImage bufferedimage,
                                             final int degree) {
         int w = bufferedimage.getWidth();

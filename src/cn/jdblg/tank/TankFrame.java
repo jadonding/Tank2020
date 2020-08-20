@@ -1,7 +1,10 @@
 package cn.jdblg.tank;
 
+import org.junit.jupiter.api.Assertions;
+
 import java.awt.*;
 import java.awt.event.*;
+import java.io.*;
 
 /**
  * @author Jadon
@@ -56,11 +59,60 @@ public class TankFrame extends Frame {
     private class TankKeyListener extends KeyAdapter {
         @Override
         public void keyPressed(KeyEvent e) {
-            gm.getMyTank().keyPressed(e);
+
+            int key = e.getKeyCode();
+            if (key == KeyEvent.VK_S) save();
+            else if (key == KeyEvent.VK_L) load();
+            else gm.getMyTank().keyPressed(e);
         }
+
         @Override
         public void keyReleased(KeyEvent e) {
             gm.getMyTank().keyReleased(e);
+        }
+    }
+
+    private void load() {
+        ObjectInputStream ois = null;
+        try {
+            File file = new File("E://test/tank.dat");
+            FileInputStream fis = new FileInputStream(file);
+            ois = new ObjectInputStream(fis);
+            GameModel gm = (GameModel) (ois.readObject());
+            this.gm = gm;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (ois != null) {
+                    ois.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void save() {
+        ObjectOutputStream oos = null;
+        try {
+            File file = new File("E://test/tank.dat");
+            FileOutputStream fos = new FileOutputStream(file);
+            oos = new ObjectOutputStream(fos);
+            oos.writeObject(this.gm);
+            oos.flush();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (oos != null) {
+                    oos.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

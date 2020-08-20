@@ -3,6 +3,7 @@ package cn.jdblg.tank.chainofresponsibility;
 import cn.jdblg.tank.GameObject;
 import cn.jdblg.tank.PropertyMgr;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +11,7 @@ import java.util.List;
  * @author Jadon
  * @create 2020-08-19-19:56
  */
-public class ColliderChain {
+public class ColliderChain implements Serializable {
     private List<Collider> colliders;
 
     public ColliderChain() {
