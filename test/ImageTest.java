@@ -21,6 +21,10 @@ public class ImageTest {
             assertNotNull(image);
             BufferedImage image2 = ImageIO.read(ImageTest.class.getClassLoader().getResourceAsStream("images/bulletD.gif"));
             assertNotNull(image2);
+//            BufferedImage gameOver = ImageIO.read(new File("E:\\Project\\Java\\MyJavaProject\\Tank\\src\\images\\gameover.jpg"));
+//            assertNotNull(gameOver);
+            BufferedImage gameOver2 = ImageIO.read(ImageTest.class.getClassLoader().getResourceAsStream("images/gameover.jpg"));
+            assertNotNull(gameOver2);
         } catch (IOException e) {
             e.printStackTrace();
         }
